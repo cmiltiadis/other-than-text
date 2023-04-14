@@ -2,8 +2,8 @@
 
 By [Blinded Author] 
 
-This is a Python program that scrapes all images from entries in the Game Studies Journal (gamestudies.org). 
-Its purpose is to mine statistics about the use of other-than-text media in Game Studies entries (i.e. images, tables, links etc.) and by that in game studies discourse. 
+This is a Python program that scrapes all media from all entries in the Game Studies Journal (gamestudies.org). 
+Its purpose is to mine statistics about the use of other-than-text media in Game Studies entries (i.e. images, tables, hyperlinks, iframes), and more generally in game studies discourse. 
 
 **The present study and related paper were completed (conducted and also tested) prior to the publication of the latest issue of the journal (2021/04), which was published in December 2021. To keep this source code consistent with the submitted paper and its data, a clause was added in 'Part 2' (which will generate a notification printout) to limit the inquiry until issue 2021/3, for corroboration purposes. Nevertheless, the associated flag can be raised to True, in order to run the code for all issues (see comments).**
 
