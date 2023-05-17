@@ -1,22 +1,21 @@
 # Game Studies Journal Scraper: Annotated Source Code
 
-Developed by Constantinos Miltiadis    
+by Constantinos Miltiadis    
 Department of Design & Department of Architecture; School of ARTS, Aalto University, Helsinki  
 [studioany.com](http://studioany.com/)
-
-Developed as part of the paper ***Other than Text: Media Used in Game Studies Publications. A Computational Analysis into 20 Years of Publications of the Game Studies Journal, and an Appeal for Research Through Design***, published in the Proceedings of the [2023 DiGRA International Conference: Limits and Margins of Games](https://digra2023.org/).   
-
-The contribution was originally submitted for peer review together with a blinded version of this source code. This present version is part of and appendix to the paper. It is temporarily hosted on the author's private GitHub account, pending action by the DiGRA board for hosting and archiving contribution artifacts that cannot be accommodated within traditional paper formats.  
-The initial version of this contribution was submitted to the Game Studies Journal. 
-
----
 
 **Description**: This is a fully annotated Python program that scrapes all non-text media from all entries of the [Game Studies Journal (gamestudies.org)](https://gamestudies.org/), and generates graphs with the results. 
 Its purpose is to mine and visualize statistics about the use of other-than-text media in Game Studies entries (i.e. images, tables, links, iframes, etc.), and provide data to discuss more generally the use of such media in game studies discourse and research communication. 
 
-**Note**: The present study and related paper were conducted, tested, and compiled in late 2021, prior to the publication of issue 2021/04 (published in December 2021). To keep this source code consistent with the submitted paper and its data, a clause was added to limit the inquiry until issue 2021/3. The associated flag (`scanAllIssues`), will generate a notification of this limitation, and can be raised to `True`, in order to run the code and generate visualizations for all issues (see comments in *Part 2*).
+This program was produced for and as part of the contribution:  
+***Other than Text: Media Used in Game Studies Publications. A Computational Analysis into 20 Years of Publications of the Game Studies Journal, and an Appeal for Research Through Design***,   
+accepted for publication in the Proceedings of the [2023 DiGRA International Conference: Limits and Margins of Games](https://digra2023.org/).   
 
----
+This source code artifact is part of the abovementioned contribution, and was originally submitted for peer review together with the paper. It is temporarily hosted on the author's private GitHub account, pending action by the [DiGRA](http://www.digra.org/) board for hosting and archiving contribution artifacts that cannot be accommodated within traditional paper formats.  
+The initial version of this contribution was submitted to the Game Studies Journal. 
+
+**Note**: The present study and related paper were conducted, tested, and compiled in late 2021, prior to the publication of journal issue 2021/04 (published in December 2021). To keep this source code consistent with the submitted paper and its data, a clause was added to limit the inquiry until issue 2021/3. The associated flag (`scanAllIssues`), will generate a notification of this limitation, and can be raised to `True`, in order to run the code and generate visualizations for all issues (see comments in *Part 2*).
+
 
 ## Source code structure 
 
@@ -26,7 +25,7 @@ Its purpose is to mine and visualize statistics about the use of other-than-text
 - Part 4: Create dataframe of journal issues; plot image count per issue. 
 - Part 5: Create dataframe with all images from journal entries; export list as CSV; import CSV after manual classification of images; plot frequency of image types; plot frequency of media combination amount per paper; plot detailed media combinations per paper; plot combination frequency per each media. 
 - Part 6: Scan entries for hyperlinks and video links; plot amount of video links per entry; plot most popular websites referenced in hyperlinks. 
-- Part 7: Annex section - functions to download all images hosted by the journal, and an inconclusive function to scrape author names. 
+- Part 7: Annex section - functions to download all images hosted by the journal used for *Part 5*, and an inconclusive function to scrape author names. 
 
 
 ## Key data scraping features 
@@ -36,21 +35,19 @@ From all entries:
 - [x] Scrape entry titles. 
 - [ ] [Inconclusive] Scrape author names: Impossible to be done automatically for all entries; authors are entered inconsistently throughout the Journal. A function that partially works is provided in *Part 7*, returning "JANE DOE" for unresolved authors. Nevertheless, for this inquiry author names are not necessary. 
 - [x] Scan for HTML tables. 
-- [x] Scan for iframes e.g. embedded Youtube videos (only one case).
+- [x] Scan for iframes e.g. embedded YouTube videos (only one case).
 - [x] Download animated GIFs (only one case).
 - [x] Scan for HTML hyperlinks and links to video material (YouTube, Vimeo, Twitch.tv, etc.).
 - [x] Scan for linked files e.g. '.wav' files  (only one case)
 
-## Notes
+## Journal archive structure, conventions & caveats
 
 The following scans and filters data from the list of links provided in the archive page of the journal (http://gamestudies.org/2103/archive ; the URL stored in the variable `gameStudiesArchiveUrl` in *Part 1*) which lists all issues (from older to newer) and all entries (alphabetically by author).
 
 The Game Studies web archive is rather inconsistent with its entries. 
-- There is no automated way to figure out if an entry is an editorial, a book review, or an actual paper -- entries are not consistently marked via HTML formatting or keywords. Practically, distinguishing entry types can be done manually since the overall amount of content is not very large. However, this is beyond the scope of this inquiry, which intends to follow an automated approach. Therefore, findings refer to entries of the Journal, rather than papers -- see next section and discussion in the paper. 
+- There is no automated way to figure out if an entry is an editorial, a book review, or an actual paper -- entries are not consistently marked via HTML formatting or keywords. Practically, distinguishing entry types can be done manually since the overall amount of content is not very large. However, this is beyond the scope of this inquiry, which intends to follow an automated approach. Therefore, findings refer to *Journal entries*, rather than papers. 
 - It's also practically impossible to retrieve the author names, abstracts, or keywords of an entry consistently and throughout the journal, since such fields are not consistently formatted with HTML tags (see also code annotations and comments in the paper).
 
-
-## Journal archive structure, conventions & caveats
 The general structure of the Journal is one Volume per year (since 2001), each containing multiple Issues. 
 Each Issue has an `issueId` which is the Volume number (the last 2 digits of the year), followed by 2 digits representing the Issue number. 
 `IssueId` 0102, for example, is Volume 1 (published in 2001), Issue 2. 
@@ -58,16 +55,14 @@ The latest issue, at the time of writing, has `issueId` 2103, which is Volume 21
 
 URL conventions for entries: 
 - **Issues before 2006**, follow a different URL convention, as in: 
-    `<journal url>`/`<issueId>`/`<author_surname(s)>`
+    `<journal url>/<issueId>/<author_surname(s)>`
 as in:  http://www.gamestudies.org/0102/newman/
 - **Issues from 2006** onwards maintain the convention: 
-   `<journal url>`/`<issueId>`/articles/`<descriptor>`
+   `<journal url>/<issueId>/articles/<descriptor>`
    as in http://gamestudies.org/0601/articles/arnseth
-   ; the 'descriptor' is often the surname(s) of the authors, but that convention is frequently broken.
+   ; the 'descriptor' is often the surname(s) of the authors, but the convention is frequently broken.
 
-As of 10/2021 (issue 2103): 
-- the number of unique issues is 41
-- the number of unique entries is 279
+As of 10/2021 (issue 2103) the number of unique issues is 41, and the number of unique entries is 279. 
 
 The 279 entries found:
 - EXCLUDE: 
@@ -76,22 +71,53 @@ The 279 entries found:
     - Editorials, that cannot be excluded automatically as they are not clearly marked (besides the first few editorials that go by a different URL convention). 
     - Book reviews. While some book reviews are marked in the title, or URL, most can only be identified from the Issue description, or by reading the content of the entry. Book reviews do not have keywords, however, that appears to be the case for some paper entries as well. Thus, there is no algorithmic way of filtering them out.
     - Other known unmarked entry types such as interviews. 
-    
+
+## Key metrics 
+
+**Parameter** | **Amount/case(s)**
+:--|:--
+Number of issues | 41 (until volume 21, issue 3; 2001-2021)
+Number of entries | 279 (including, book reviews, interviews, and most editorials that cannot be excluded computationally)
+Number of images (overall) | 659 (in 109 entries; 39%) 
+Number of HTML tables (overall) | 70 (in 36 entries; 13%)
+Entries with images or tables | 124 (44%)
+Image filetypes | JPG (77%), GIF (12%), PNG (11%; although not provisioned)
+Images types found | 16
+Embedded content (iframes) | one case (YouTube video) <!--'0401/whalen/' -->
+Animated GIFs| one case
+Sound files | one case
+Amount of referenced video links | 93 (in 29 entries; 10%)
+Most used media type | Videogame screenshot (44% of all images)
+Most combined media type | Videogame screenshot (in 56% of unique combinations) 
+Most common hyperlink | "gamestudies.org" (137 instances in 62 entries; 22%)
+Most referenced hyperlink | DOI links (306 instances in 37 entries; 13%)
+
+### Special media cases 
+- Use of WAV audio files (16 in total), together with images and musical scores:     
+    Whalen, Zach. ‘Play Along - An Approach to Videogame Music’. Game Studies 4, no. 1 (November 2004). https://www.gamestudies.org/0401/whalen/.
+- The only use of an inline frame (iframe), which positioned in the text body:  
+    Adams, Meghan Blythe, and Nathan Rambukkana. ‘“Why Do I Have to Make a Choice? Maybe the Three of Us Could, Uh...”: Non-Monogamy in Videogame Narratives’. Game Studies 18, no. 2 (September 2018). http://gamestudies.org/1802/articles/adams_rambukkana.
+- Text hyperlinks to (large) images which do not appear in the text (diagrams):  
+    Tuur Ghys. ‘Technology Trees: Freedom and Determinism in Historical Strategy Games’. Game Studies 12, no. 1 (September 2012). https://www.gamestudies.org/1201/articles/tuur_ghys.
+- The only case of an animated GIF (Figure 2, depicting the 'game of life' algorithm):  
+    Soler-Adillon, Joan. ‘The Open, the Closed and the Emergent: Theorizing Emergence for Videogame Studies’. Game Studies 19, no. 2 (October 2019). https://gamestudies.org/1902/articles/soleradillon.
+
+
+
 ## License
 
-The present is provided under a *General Public License* -- free and open source license -- for corroboration of the inquiry as well as for encouraging modifications, derivatives, and extensions of this work. 
+The present is provided under a *General Public License* -- copyleft license -- for corroboration of the inquiry as well as for encouraging modifications, derivatives, and extensions of this work. 
 
 ## Use 
 
-- Novice programmers who want to run the code via Jupyter are advised to first clone or download the repository, and run the IPYNB file via Jupyter. Pressing the play button will execute the program cell by cell. This, given that Python and [Jupyter (https://jupyter.org/)](https://jupyter.org/) are installed, as well as library dependencies. 
-- The program requires the user to create two subfolders for saving images and data (see *Part 1*). 
+- This program can be executed via Jupyter. It is adviced to clone or download this repository, and run the IPYNB file via Jupyter. Pressing the play button will execute the program cell by cell. This, given that Python and [Jupyter (https://jupyter.org/)](https://jupyter.org/) are installed. 
 - Certain cells require downloading and processing data which might take a few minutes, depending on internet connection speeds. In these cases the progress of the prgram is printed in text. Most blocks should run instanstaneously. In case of errors, it is advised to restart the Kernel and run the program from the beginning. 
 
 ## Acknowledgements 
-I would like to thank Petros Koutsolampros and Andreas Kelemen for their assistance with coding and graph visualizations, and Miro Roman for his help with a first proof of concept image scraper developed in Mathematica. 
+I would like to thank Petros Koutsolampros and Andreas Kelemen for their assistance with coding and graph visualizations, and Miro Roman for his help with a first proof of concept image scraper developed in Mathematica in 2021. 
 
-# Part 1: Setup
-## Import libraries for web scraping, load functions & set main variables
+## Part 1: Setup
+### 1.1 Import libraries for web scraping, load functions & set main variables
 
 Note: Manually create subfolders for exporting data, corresponding to the names of the variables `imageExportFolder` and `dataExportFolder` (here `img_export` and `data_export`). If such folders don't exist, the next cell will pop a notification.
 
@@ -122,7 +148,7 @@ if (os.path.isdir(imageExportFolder)==False):
     print ('***Error: Image export folder does not exist. Create a subfolder titled: '+ imageExportFolder)
 ```
 
-## Web-Scraping Functions 
+### 1.2 Web-Scraping Functions 
 First cell contains a function to get elemental data for each individual entry.   
 The second cell contains distinct functions, for getting specific data per entry, such as images, links, and tables.  
 
@@ -228,7 +254,7 @@ def getImages(url):
         
     return imageUrls
 
-def getTitle(url): # .... some titles are formatted as h1,most as h2.. mammma mia
+def getTitle(url): # ... some titles are formatted as h1,most as h2.. mammma mia
     html = urlopen(url)
     bs = BeautifulSoup(html, 'html.parser', from_encoding="UTF-8") ## need to force UTF 8 encoding, else it gets it wrong
     #check for H1 (header content )
@@ -245,7 +271,6 @@ def getTitle(url): # .... some titles are formatted as h1,most as h2.. mammma mi
 ## For testing: 
 # getImages("http://gamestudies.org/0801/articles/hutch")# works 
 # getTitle("http://gamestudies.org/0801/articles/hutch")#works for all
-# getAuthor("http://gamestudies.org/0801/articles/hutch") # does not work for all
 
 #Function to get HTML tables
 #Manually filtering out problematic HTML formatting and Figures entered in table format 
@@ -286,8 +311,8 @@ def getIframeLinks(url):
             print(iframe['src'])
 ```
 
-# Part 2: Scan and Filter Archive Entries & Scrape Information 
-## Get all HTML links from Game Studies Archive 
+## Part 2: Scan and Filter Archive Entries & Scrape Information 
+### 2.1 Get all HTML links from Game Studies Archive 
 
 
 ```python
@@ -302,7 +327,7 @@ print ("Found "+ str(len(links))+ " links in: "+ gameStudiesArchiveUrl)
     Found 383 links in: http://gamestudies.org/2103/archive
     
 
-## Filter links to get valid entries 
+### 2.2 Filter links to get valid journal entries 
 Entries can include book reviews and editorials as these cannot be filtered out automatically (see notes in code)
 
 
@@ -353,7 +378,7 @@ cfp_prefix='cfp' #this will catch all published 'calls for papers' (n=2), and is
 # However, the journal's conventions are rather inconsistent, and this does not seem catch all such cases.
 # Therefore  the asocciated lines of code have been commented out.   
 ignoreHeavy=False  # associated code below is commented out 
-entriesToIgnore=['cfp', 'aarseth', 'review','reivew_vella', 'editorial']
+entriesToIgnore=['cfp', 'aarseth', 'review','reivew_vella', 'editorial'] # Not used
 #################################################
 
 for link in links:
@@ -380,8 +405,8 @@ for link in links:
 #                     continue
            
             # get issue info 
-            issueId= int( parse[3]) # prone to error, that's why the 'try:'
-#             print(str(issueId)+"---" + link)
+            issueId= int( parse[3]) # prone to error; that's why the 'try' above
+#             print(str(issueId)+"---" + link) # for testing
             issueYear= int(issueId/100)+2000 # get issue year 
             issueNumber= issueId%100 # get issue number, last 2 digits 
             
@@ -451,7 +476,7 @@ if scanAllIssues== False:
     Ignored entries published in issues later than this inquiry:31
     
 
-## Scrape all entries for title information, and amounts of images and HTML tables 
+### 2.3 Scrape all entries for title information, images & HTML tables 
 
 
 ```python
@@ -497,7 +522,7 @@ print("Scan Finished. " + str(nImages)+ " Images & "+ str(nTables)+" HTML Tables
     Scan Finished. 659 Images & 70 HTML Tables found in 279 entries of 41 issues.
     
 
-### Check for image file formats
+### 2.4 Check for image file formats
 This is not necessary but informative metric, given that the journal asks for JPG or GIF images, which are lossy formats. 
 
 
@@ -537,8 +562,8 @@ print("Note: only PNG is a 'lossless' format; journal guidelines ask for JPG or 
     Note: only PNG is a 'lossless' format; journal guidelines ask for JPG or GIF.
     
 
-# Part 3: Create GSJ Entries dataframe (spreadsheet) 
-## Load Libraries for Statistics and Graph Plots
+## Part 3: Create GSJ Entries dataframe (spreadsheet) 
+### 3.1 Load Libraries for Statistics and Graph Plots
 
 
 ```python
@@ -546,10 +571,11 @@ print("Note: only PNG is a 'lossless' format; journal guidelines ask for JPG or 
 import pandas as pd #dataframes & plotting
 import matplotlib.pyplot as plt # matplotlib for additional plotting
 import matplotlib.ticker as mtick
+import matplotlib.patches as mpatches # for accessing graph bar objects 
 import numpy as np #math
 ```
 
-## Create dataframe of Entries
+### 3.2 Create dataframe of Entries
 
 
 ```python
@@ -685,7 +711,8 @@ edf.head()
 
 
 
-## 3.1 Plot Image Frequency in Single Papers
+### 3.3 Plot Image Frequency in Single Papers 
+Two graphs, (a) for all entries, and (b) for entries *with* images. 
 
 
 ```python
@@ -720,12 +747,12 @@ for i in range(0, len(graph.patches)):
 
 #save plot 
 if savePlots==True: 
-    filename= 'gsc_image_frequency.png'
+    filename= 'gsc_image_frequency_in_entries.png'
     graph.get_figure().savefig(os.path.join(dataExportFolder,filename), bbox_inches = 'tight', dpi=300)
     print("Saved graph as: " + filename)
 ```
 
-    Saved graph as: gsc_image_frequency.png
+    Saved graph as: gsc_image_frequency_in_entries.png
     
 
 
@@ -755,8 +782,6 @@ graph= byImgCount_exclZero.plot(kind='bar',
                                 figsize=(11,7), 
                                 yticks= range(0,20)[::2])
 
-# graph.xticks([0::20])
-
 #annotate bars with values 
 #True for adding Percentage, False for just count
 for p in graph.patches: 
@@ -769,14 +794,14 @@ for p in graph.patches:
 
 #save plot 
 if savePlots==True: 
-    filename= 'gsc_image_count_probability.png'
+    filename= 'gsc_image_frequency_in_entries_non_zero.png'
     graph.get_figure().savefig(os.path.join(dataExportFolder,filename), bbox_inches = 'tight', dpi=300)
     print("Saved graph as: " + filename)
 ```
 
     image-bearing entries:109
     Standard deviation:5.6
-    Saved graph as: gsc_image_count_probability.png
+    Saved graph as: gsc_image_frequency_in_entries_non_zero.png
     
 
 
@@ -785,7 +810,7 @@ if savePlots==True:
     
 
 
-## 3.2 Plot HTML Table Frequency in Single Papers
+### 3.4 Plot HTML Table Frequency in Single Papers
 
 
 ```python
@@ -815,7 +840,7 @@ for i in range(0, len(graph.patches)):
     label= p.get_height()
     if i==0: #get percentage for first one 
         perc= np.round(label/nEntries*100.)
-        label =str(label) +" ("+str(perc)+"%)"
+        label =str(label) +" ("+str(round(perc))+"%)"
     graph.annotate(label,
                    (p.get_x()+p.get_width()/2., p.get_height()),ha='center',
                    va='center',xytext=(0, 6),textcoords='offset points') 
@@ -1042,7 +1067,7 @@ idf.head()
 
 
 
-## 4.1 Plot Image Count per Issue
+### 4.1 Plot Image Count per Issue
 
 
 ```python
@@ -1487,7 +1512,6 @@ eadf.head()
 
 
 ```python
-
 # PLOT BY COUNT 
 sortedByMediaTypeCount=  eadf.sort_values(by=['media_types_count'])
 # sortedByMediaTypeCount
@@ -1552,14 +1576,14 @@ for p in graph.patches:
     
 #save plot 
 if savePlots==True: 
-    filename='gsc_media_types_perc.png'
+    filename='gsc_media_types_non_zero.png'
     graph.get_figure().savefig(os.path.join(dataExportFolder,filename), 
                                bbox_inches = 'tight', dpi=300)
     print("Saved graph as: " + filename)
 ```
 
     Entries with media:124
-    Saved graph as: gsc_media_types_perc.png
+    Saved graph as: gsc_media_types_non_zero.png
     
 
 
@@ -1713,193 +1737,236 @@ verbose= False
 
 print("Scanning entries for Hyperlinks. Wait for confirmation message.. (~1min)")
 #scanning could also check for linked files. 
-#Besides enlarged images a known case is '.wav' files, submited and uploaded similarly as figures 
-for index, row in edf.iterrows(): 
+#Besides enlarged images a known case is '.wav' files, submited and uploaded similarly as figures
 
+# loop through entries and scan for hyperlinks; add to array
+linkCount=0
+for index, row in edf.iterrows(): 
     #print every 20 
     if index>0 and index % 20==0: 
-        print("processed "+ str(index)+" of "+ str(nEntries)) 
+        print("..processed "+ str(index)+" of "+ str(nEntries)+" entries..") 
     url=row['url']
     
-    #Get all Hrefs 
+    #Get all Hrefs per entry 
     links= getLinksInPage(url)
+    linkCount+= len(links)
     #save to array 
     allEntryLinks[index]= links
 
-print("Scan Finished ")
+print("Scan Finished. Found "+ str(linkCount)+ " hyperlinks.")
 ```
 
     Scanning entries for Hyperlinks. Wait for confirmation message.. (~1min)
-    processed 20 of 279
-    processed 40 of 279
-    processed 60 of 279
-    processed 80 of 279
-    processed 100 of 279
-    processed 120 of 279
-    processed 140 of 279
-    processed 160 of 279
-    processed 180 of 279
-    processed 200 of 279
-    processed 220 of 279
-    processed 240 of 279
-    processed 260 of 279
-    Scan Finished 
+    ..processed 20 of 279 entries..
+    ..processed 40 of 279 entries..
+    ..processed 60 of 279 entries..
+    ..processed 80 of 279 entries..
+    ..processed 100 of 279 entries..
+    ..processed 120 of 279 entries..
+    ..processed 140 of 279 entries..
+    ..processed 160 of 279 entries..
+    ..processed 180 of 279 entries..
+    ..processed 200 of 279 entries..
+    ..processed 220 of 279 entries..
+    ..processed 240 of 279 entries..
+    ..processed 260 of 279 entries..
+    Scan Finished. Found 6414 hyperlinks.
     
 
-### 6.2 Filter hyperlinks, scan for video links 
-Filter for valid links. 
-Scan links that match Youtube or Vimeo, and plot graph with their frequencies
+### 6.2 Filter hyperlinks
+Filter for valid hyperlinks. 
+
+The conditionals below: 
+- ignore various types of invalid and null links;
+- ignore internal or relative links
+- ignore email hyperlinks (`mailto:...`); 
+- ignore links to the journal's archive page, about page, journal issues,and RSS;
+- gathers separately links to JPG, PNG, GIF, WAV, MP3 (0) files. 
 
 
 ```python
 ## FILTER Hyperlinks to get valid entries (as much as possible )
-
-#video streaming sites 
-videoStreamingSites= ['youtu.be', 'youtube.com','vimeo.com','dailymotion.com', 'twitch.tv'] #'archive.org'
-
-#if a link starts with the following, skip 
-ignoreLinks=['http://validator.w3.org',
+#if a URL starts with the following, skip 
+IGNORE_LINKS=['http://validator.w3.org',
              'http://www.gamestudies.org/about', 
              'http://gamestudies.org/about',
-            'http://gamestudies.org/rss']
+            'http://gamestudies.org/rss',
+             'https://gamestudies.org/rss']
+#ignore these precise URLs  
+IGNORE_PRECISE=['http://gamestudies.org', 'http://www.gamestudies.org', '/about.html', '../about.html']
+GAMESTUDIES_ROOT=['http://gamestudies.org', 'https://gamestudies.org', 'http://www.gamestudies.org', 'https://www.gamestudies.org']
+DOI_FORMAT='doi:'
+DOI_URL='https://doi.org/'
 
-ignorePrecise=['http://gamestudies.org', 'http://www.gamestudies.org', '/about.html', '../about.html']
-
-# validLinks={}
-hrefs= [[] for _ in range(nEntries)] # list of hyperlinks
-videoRefs=[0]*nEntries
+hrefs= [[] for _ in range(nEntries)] # list of hyperlinks per entry
+videoRefs=[0]*nEntries # count of video references per entry
 
 brokenLinks=[]#list of broken links 
 
+mediaLinks={'jpg':0, 'png':0, 'gif':0,'wav':0, 'mp3':0}
+internalLinks=0
+
+# loop through array of Hyperlinks by Entry
 for entryIndexKey in allEntryLinks: 
-    
     #loop through entry links 
     for link in allEntryLinks[entryIndexKey]: 
-        
-        
         #skip if url is None 
         if link is None :
-            if verbose: 
-                print("skip none ")
+#             if verbose: 
+#                 print("Skip null link")
             continue
-        
-        #remove white spaces
-        link= link.strip()
-        
-        if link=='/':
-            if verbose: 
-                print("Skip '/'")
+        link= link.strip()         #remove white spaces
+        ##
+        if link=='/': # skip links that are just '/'
+#             if verbose: 
+#                 print("Skip '/'")
             continue
-        
-        #skip emails 
-        if link.startswith('mailto'): 
-            if verbose: 
-                print("skip email: "+ link)
+            ##
+        if link.startswith('mailto'):  #skip emails 
+#             if verbose: 
+#                 print("Skip email link: "+ link)
             continue
-        #skip if internal link to footnote/endnote
-        if link.startswith('#'): 
-            if verbose:
-                print("Ignore #: "+ link)
+            ##
+        if link.startswith('#'): #skip internal/relative links to footnote/endnote
+            internalLinks+=1
+            if verbose: print("Skip internal/relative link: "+ link)
             continue
-        #prepend HTTP in links that dont have that 
-        if link.startswith('www.'): 
+        if  len(link.split('.'))<2: 
+            if verbose: print("Invalid or internal URL:"+ link)
+            internalLinks+=1
+            continue
+            ##
+        if (DOI_FORMAT in link): # Get DOI links formatted different
+            colonIndex= link.index(DOI_FORMAT)
+            doiLink= link[colonIndex+ len(DOI_FORMAT):]
+            doiLink= DOI_URL+doiLink
+            hrefs[entryIndexKey].append(doiLink)
+            if verbose: print("Reformatted DOI as: "+doiLink)
+            continue
+
+        if link.startswith('www.'): #prepend HTTP in URLs that dont have that 
             link="http://"+ link
+            if verbose: print('http:// Prepend: ' + link)
+        ##
         #skip ignore cases
-        if any( link.startswith(ignoreLink) for ignoreLink in ignoreLinks ): 
-            if verbose: 
-                print("Ignore case in:"+ link)
+        if any( link.startswith(ignoreLink) for ignoreLink in IGNORE_LINKS ): 
+#             if verbose: 
+#                 print("Skip URL by start pattern from IGNORE_LINKS: "+ link)
             continue
         #ignore cases 
-        if any (link == ignore for ignore in ignorePrecise): 
-            if verbose: 
-                print("ingore gs: "+ link)
+        if any (link == ignore for ignore in IGNORE_PRECISE): 
+#             if verbose: 
+#                 print("Skip link from IGNORE_PRECISE: "+ link)
             continue
-        
-        #filter internal game studies links
-        
-        #fix broken GS links / add http:// for game studies journal links without
+                
+        #fix a few GSJ URLs that need 'http://www.'
         if link.startswith('gamestudies.org/'): 
             link= "http://www."+ link
-            
-          #this gets rid of a lot of remaining invalid links 
+        #this gets rid of a lot of remaining invalid links 
         if not is_valid(link): 
-#             print("invalid link "+ str(link))
             brokenLinks.append(link)
+            if verbose: 
+                print ("Skip broken/invalid/internal link: "+ link)
             continue 
+#         verbose=False
         
-        if link.startswith('http://gamestudies.org') or link.startswith('http://www.gamestudies.org'):
+        ### FILTER GAMESTUDIES.ORG links 
+        # match URL start 
+        if any( link.startswith(gsRoot) for gsRoot in GAMESTUDIES_ROOT ): 
+            # LOOK FOR LINKS TO FILES (WAV, MP3,JPG, PNG GIF)
+            if any(link.endswith(wavFile) for wavFile in ['.wav', '.WAV']): 
+                mediaLinks['wav']+=1
+#                 if verbose: print ("WAV link:"+ link)
+                continue
+            elif any (link.endswith(mp3File) for mp3File in ['.mp3', '.MP3']):
+                mediaLinks['mp3']+=1
+#                 if verbose: print("MP3 link:"+link)
+                continue 
+            elif any (link.endswith(jpgFile) for jpgFile in ['.jpg', '.jpeg','.JPG', '.JPEG']):
+                mediaLinks['jpg']+=1
+#                 if verbose: print ("JPG link:"+ link)
+                continue
+            elif any (link.endswith(pngFile) for pngFile in ['.png', '.PNG']):
+                mediaLinks['png']+=1
+#                 if verbose: print("PNG link:"+link)
+                continue   
+            elif any (link.endswith(gifFile) for gifFile in ['.gif', '.GIF']):
+                mediaLinks['gif']+=1
+#                 if verbose: print("GIF link:"+link)
+                continue 
+            # split URL parts to match links to Archive or About pages 
             split = link.split('/')
             #skip GSJ about link
             if split[-1]=='about' or split[-2]=='about': 
-                if verbose: 
-                    print ("skip about: "+ link)
+#                 if verbose: 
+#                     print ("Skip about page: "+ link)
                 continue
             #skip GSJ archive link
             if split[-1]=='archive' or split[-2]=='archive': 
-                if verbose:
-                    print ("skip archive: "+ link)
+#                 if verbose:
+#                     print ("Skip archive page: "+ link)
                 continue
             #skip link to GSJ issue  
             if len(split)==4 or (len(split)==5 and split[4]==''): 
-                if verbose: 
-                    print("Skip issue number: "+ link)
+#                 if verbose: 
+#                     print("Skip link to journal issue: "+ link)
                 continue
             #skip internal footnotes/endnotes 
             if split[-1].startswith('#'): 
+                internalLinks+=1
                 if verbose: 
                     print("Skip internal #link: "+ link)
                 continue
-            #skip links to 'issue art' (two cases)
+            #skip links to 'issue art' or 'articleimages' (from different archiving conventions)
             if len(split)>3 and split[3]=='articleimages': 
                 if verbose: 
-                    print ("Skip issue art: "+ link)
+                    print ("Skip article images: "+ link)
                 continue
             if len(split)>4 and split[4]=='issue-art': 
                 if verbose: 
                     print ("Skip issue art: "+ link)
                 continue 
-
         # if all checks passed then add to list 
         hrefs[entryIndexKey].append(link)
-        
 
-#print links 
-print("Found: "+ str(len(hrefs))+" unique websites")
-#print broken link count -- mostly (relative) internal links, links to images,
+# get link sum 
+sumOfLinks=0
+for entryIndex in range(0, len(hrefs)): 
+    entryLinks= len(hrefs[entryIndex])
+    sumOfLinks+=entryLinks
+print ("Sum of links: "+ str(sumOfLinks))
+# print links to media 
+print("Links to files:")
+for ml in mediaLinks: 
+    print ('\t'+ml.upper()+ " links: "+ str(mediaLinks[ml]))
+print("Internal/relative links: "+str(internalLinks))
+   
+#print broken link count -- mostly relative/internal links, links to images,
 #and urls without www or http prefix 
-print("Found "+ str(len(brokenLinks))+" broken hyperlinks (see \'brokenLinks\' array, line 118).")
-# print broken links with line below 
-# print(brokenLinks)
-        
-# problematic links (spaces inbetween the url, or connected with text, or characters missing), examples:
-# - 'Onlinehttp://blogs.suntimes.com/ebert/2010/07/okay_kids_play_on_my_lawn.html'
-# - 'ttp://www.wowhead.com/npc=23616#'
-# - 'http://www.gamasutra.com/ php-bin/news_index.php?story=19104'
-# - 'http://www.washingtontimes.com/news/2005/jan/19/20050119- 120236-9054r/?page=all'
-
-#loop through valid links and look for video streaming sites 
-for i in range(0, len(hrefs)): 
-    for link in hrefs[i]: 
-        if any (site in link for site in videoStreamingSites): 
-            if verbose: 
-                print(str(i)+" : video "+ link)
-            videoRefs[i]+=1
-#     if videoRefs[i]>0: 
-#         print(str(i)+" has "+ str(videoRefs[i])+" videolinks")
-
-        #skip prefix except if 'blogs', 'blogspot', 'wordpress'
+print("Broken/internal hyperlinks: "+ str(len(brokenLinks))+" (see \'brokenLinks\' array).")
+# Test: print broken links with line below 
+#print(brokenLinks)
+# Examples of problematic links (spaces inbetween the url, or connected with text, or characters missing):
+# - (appended with text) 'Onlinehttp://blogs.suntimes.com/ebert/2010/07/okay_kids_play_on_my_lawn.html'
+# - (missing 'h') 'ttp://www.wowhead.com/npc=23616#'
+# - (contains space) 'http://www.gamasutra.com/ php-bin/news_index.php?story=19104'
+# - (contains space) 'http://www.washingtontimes.com/news/2005/jan/19/20050119- 120236-9054r/?page=all'
 
 #Add column 'hrefs' to dataframe
 edf['hrefs']=hrefs
-edf['videoRefs']= videoRefs
-nVideoRefs= edf['videoRefs'].sum()
-print("Video references found: "+ str(nVideoRefs))
 edf.head()
+# note: Have checked for self-referential links in entries
 ```
 
-    Found: 279 unique websites
-    Found 92 broken hyperlinks (see 'brokenLinks' array, line 118).
-    Video references found: 93
+    Sum of links: 2246
+    Links to files:
+    	JPG links: 63
+    	PNG links: 39
+    	GIF links: 1
+    	WAV links: 19
+    	MP3 links: 0
+    Internal/relative links: 2189
+    Broken/internal hyperlinks: 58 (see 'brokenLinks' array).
     
 
 
@@ -1934,11 +2001,9 @@ edf.head()
       <th>media_types</th>
       <th>media_types_count</th>
       <th>hrefs</th>
-      <th>videoRefs</th>
     </tr>
     <tr>
       <th>entryIndex</th>
-      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -1965,8 +2030,7 @@ edf.head()
       <td>1</td>
       <td>[Diagram, Table]</td>
       <td>2</td>
-      <td>[https://www.gamestudies.org/0101/, https://ga...</td>
-      <td>0</td>
+      <td>[http://www.dichtung-digital.de/2001/05/29-Esk...</td>
     </tr>
     <tr>
       <th>1</th>
@@ -1980,8 +2044,7 @@ edf.head()
       <td>1</td>
       <td>[Algorithm, Diagram, Film Screenshot, Game Scr...</td>
       <td>8</td>
-      <td>[https://www.gamestudies.org/0101/, https://ga...</td>
-      <td>0</td>
+      <td>[http://diac.it-c.dk/cgdt]</td>
     </tr>
     <tr>
       <th>2</th>
@@ -1995,8 +2058,7 @@ edf.head()
       <td>1</td>
       <td>[]</td>
       <td>0</td>
-      <td>[https://www.gamestudies.org/0101/, https://ga...</td>
-      <td>0</td>
+      <td>[http://www.babyz.net/, http://www.salon.com/t...</td>
     </tr>
     <tr>
       <th>3</th>
@@ -2010,8 +2072,7 @@ edf.head()
       <td>1</td>
       <td>[]</td>
       <td>0</td>
-      <td>[https://www.gamestudies.org/0101/, https://ga...</td>
-      <td>0</td>
+      <td>[http://www.jesperjuul.dk/en, http://diac.it-c...</td>
     </tr>
     <tr>
       <th>4</th>
@@ -2025,8 +2086,7 @@ edf.head()
       <td>1</td>
       <td>[]</td>
       <td>0</td>
-      <td>[https://www.gamestudies.org/0101/, https://ga...</td>
-      <td>0</td>
+      <td>[http://diac.it-c.dk/cgdt]</td>
     </tr>
   </tbody>
 </table>
@@ -2034,10 +2094,27 @@ edf.head()
 
 
 
-### 6.3 Plot Video link frequency in entries 
+### 6.3 Scan for links to videos and video link frequency in entries 
+Scan URLs that match Youtube, Twitch, Vimeo, etc. and plot graph with their frequencies in entries
 
 
 ```python
+#video streaming sites 
+VIDEO_STREAMING_SITES= ['youtu.be', 'youtube.com','vimeo.com','dailymotion.com', 'twitch.tv']
+
+#loop through valid links and look for video streaming sites 
+for entryIndex in range(0, len(hrefs)): 
+    for link in hrefs[entryIndex]: 
+        if any (site in link for site in VIDEO_STREAMING_SITES): 
+            if verbose: 
+                print("Video link in entry "+ str(entryIndex)+" : "+ link)
+            videoRefs[entryIndex]+=1
+
+#Add column 'videoRefs' to dataframe
+edf['videoRefs']= videoRefs
+nVideoRefs= edf['videoRefs'].sum()
+print("Total video references found: "+ str(nVideoRefs))
+
 # Plot frequency of Video Links in Entries 
 #sort, and count values
 byVideoCount=edf.sort_values(by=['videoRefs'])
@@ -2074,6 +2151,7 @@ if savePlots==True:
     print("Saved graph as: " + filename)
 ```
 
+    Total video references found: 93
     Video bearing entries:29
     Video bearing entries percentage:10.39
     Saved graph as: gsc_videolink_frequency.png
@@ -2086,13 +2164,21 @@ if savePlots==True:
 
 
 ### 6.4 Strip URLs to their root components and list most popular websites 
+- Get base/root URLs 
+- Get number of occurences per individual entries to base URLs, count occurences, and save instances
+- Label adjustments 
+    - [DOI] (includes both 'doi.org' and 'doi:')
+    - [Loading Journal] ('journals.sfu.ca')
+    - jesperjuul.net (includes jesperjuul.dk)
 
 
 ```python
+keepUrlPrefix=False # flag for using base URL as in site.com, or to account for subdomains 
+
 #remove http, https, www. and return root url 
 def get_strippedUrl(url, keepPrefix=False): 
 #     if url.startswith("file"): print("FILE:"+ url)
-    
+    url=url.lower()
     #remove https
     skip= 'https://'
     if url.startswith(skip): 
@@ -2105,6 +2191,7 @@ def get_strippedUrl(url, keepPrefix=False):
     skip= 'www.'
     if url.startswith(skip): 
         url= url[len(skip)::]
+        
     #split by '/'
     result= url.split('/')[0]
     #return first part 
@@ -2117,29 +2204,31 @@ def get_strippedUrl(url, keepPrefix=False):
             #for the case of 2 digit urls, for example uk
             if dotSplit[-1]=='uk' and len(dotSplit)>=3: 
                 result= dotSplit[-3]+'.'+result
-        #return 
         return result
     
 
 
 #dict of common links 
-commonLinkInstances={}
-commonLinkEntries={}
-commonLinkCases={}
+commonLinkInstances={} # instances of a base URL
+commonLinkEntries={} # entries referencing a particular base URL  
+commonLinkCases={} # specific instances of a base URL
 
 #create dictionaries 
 for index, entry in edf.iterrows(): 
     for href in entry['hrefs']: 
-#         if href=='http://%22' : print("!!!!!!!!!!!!!!!!!!!!!!!!!!  "+ entry['url'] )
         #strip url to its root 
-        strippedUrl= get_strippedUrl(href, False)
+        strippedUrl= get_strippedUrl(href, keepUrlPrefix)
 #         print(strippedUrl+" "+ href)
         #merge youtube.com and youtu.be 
+        if (strippedUrl=='jesperjuul.dk'):  #same website
+            strippedUrl='jesperjuul.net'
         if strippedUrl=='youtu.be': 
             strippedUrl='youtube.com'
+        if strippedUrl=='web.archive.org': 
+            strippedUrl='archive.org'
         #merge doi with e.g. dx.doi.org
         if strippedUrl.endswith('doi.org'): 
-            strippedUrl= 'doi.org'
+            strippedUrl= '[DOI]'
         #all entries in 'journals.sfu.ca' are from the Loading journal 
         if strippedUrl=='journals.sfu.ca': 
             strippedUrl='[Loading Journal]'
@@ -2154,26 +2243,35 @@ for index, entry in edf.iterrows():
         else: #otherwise create first entry 
             commonLinkEntries[strippedUrl]=[index] # start array
             commonLinkInstances[strippedUrl]=1 #set counter to one 
-            commonLinkCases[strippedUrl]=[href]            
-
+            commonLinkCases[strippedUrl]=[href] # specific URL instance            
 
 print ("Unique websites: "+ str(len(commonLinkCases)))
 
+# Test: print URLs found in many entries, with total instances 
+# for key in commonLinkCases: 
+#     uniqueEntries = (len(commonLinkEntries[key]))
+#     urlInstances= len(commonLinkCases[key])
+#     if (uniqueEntries<=5): 
+#         print (' - '+ key+ " | "+ str(uniqueEntries)+"  unique entries | "+ str(urlInstances)+" total instances." )
 ```
 
-    Unique websites: 871
+    Unique websites: 865
     
 
 ### 6.5 Plot common websites 
+- Plot common base URLs, occuring in individual entries more than 5 times (`websiteFrequencyToPlot`)
+- Group and color base URLs according to website type
 
 
 ```python
 #filter data to get websites appearaing in more than X different entries 
 websiteFrequencyToPlot=5
+colorGraph=True # toggle to color bar graphs or not 
 
-#assemble data - popular links, in 
+#assemble data: common base URLS in different entries, their count and instances
 hrefData={}
 hrefsIgnored= {}
+hrefInstances={}
 for k in commonLinkEntries: 
     # if a page is mentioned in more than X amount of in different entries 
     linkInXDifferentEntries= len(commonLinkEntries[k])
@@ -2182,76 +2280,133 @@ for k in commonLinkEntries:
         #print metrics 
 #         print(k+ " is referened in " +str(len(commonLinkEntries[k]))+" different articles, "+str(commonLinkInstances[k])+ " times overall" )
         hrefData[k]=len(commonLinkEntries[k])
+        hrefInstances[k]= commonLinkInstances[k]
     else: 
         hrefsIgnored[k]= len(commonLinkEntries[k])
 
+#TEST 
 #print filtered cases 
 # print(hrefData)
 #print what is ignored from this filtering
 # print(hrefsIgnored)
-#check for 
-# print(commonLinkCases['gamestudies.org'])
 
-#make dataframe 
+#make dictionary 
 href_data= {"website": hrefData.keys(), 
                        "occurences": hrefData.values()}
-
 #create dataframe
 href_df= pd.DataFrame(href_data)
-
-#for coloring / grouping 
-# game studies ['gamestudies.org', 'digra.org', 'eludamos.org']
-# general academic ['doi.org', 'tandfonline.com', 'acm.org', 'sagepub.com']
-# news ['theguardian.com','wired.com', 'nytimes.com', 'washingtonpost.com']
-# game culture ['gamasutra.com', 'kotaku.com', 'ign.com','polygon.com' ]
-
-#sort
+# sort by occurences
 href_sorted= href_df.sort_values(by=['occurences'],ascending=False)
 
-#plot
-graph= href_sorted.plot(kind='bar', title='Website links occuring in more than '+str(websiteFrequencyToPlot) +" entries of GSJ", 
-                        figsize= (10,6), 
-                       xlabel="Website URL", ylabel="Occurrences in unique entries", 
-                       legend=False)
+# COLOR GROUPING
+# Website groups
+gameStudies=  ['gamestudies.org', 'digra.org', 'eludamos.org','[Loading Journal]']
+generalAcademic = ['[DOI]', 'tandfonline.com', 'acm.org', 'sagepub.com', 'wiley.com', 'journal.media-culture.org.au']
+press = ['theguardian.com','wired.com', 'nytimes.com', 'washingtonpost.com', 'forbes.com','theverge.com', 'vice.com','slate.com', 'suntimes.com', 'telegraph.co.uk', 'engadget.com']
+gamePress = ['gamasutra.com', 'kotaku.com', 'ign.com','polygon.com','pcgamer.com','eurogamer.net', 'gamespot.com','gamesindustry.biz', 'theesa.com','joystiq.com', 'rockpapershotgun.com', 'escapistmagazine.com']
+scholars = ['ludology.org', 'jesperjuul.net', 'nickyee.com', 'costik.com', 'bogost.com']
+# symmetrical arrays of website groups and corresponding colors 
+websiteDict={
+    'Game studies publications':  gameStudies, 
+    'Other academic publications': generalAcademic,
+    'Videogame press' :  gamePress,
+    'Press': press,
+    'Videogame scholars':scholars,
+    'Other websites': [] # this is to remain empty, and will match the category/color to what isn't elsewhere 
+}
+colorDict={
+    'Game studies publications':  'steelblue',
+    'Other academic publications':'seagreen',
+    'Videogame press' :'salmon',
+    'Press': 'lightgrey',
+    'Videogame scholars':'hotpink', #'wheat',#'lightblue',# 
+    'Other websites': 'orange' 
+}
 
-# graph.color(barColors)
+# Get labels 
+graphLabels=[]
+patchCounter=0
+colors=[]
+for index, row in href_sorted.iterrows():
+    ws= row['website']
+    inEntries = row['occurences']
+    inEntriesPerc= str(round(inEntries/nEntries*100) )+'%'
+    instances= str(hrefInstances[ws])+'i'
+    #graph labels 
+    label=str(inEntries) 
+    label += '\n' if (patchCounter!=0) else ' ('# new line or space
+    label+=   inEntriesPerc
+    label += '\n' if (patchCounter!=0) else ', ' # new line or space
+    label += (instances) 
+    label +=')'if (patchCounter==0) else ' ' 
+    graphLabels.append(label)
+    patchCounter+=1
+    # colors # color guide: https://matplotlib.org/2.0.2/examples/color/named_colors.html
+    colorMatch=False
+    for siteCategory in websiteDict: 
+        if ws in websiteDict[siteCategory]: 
+            colors.append(colorDict[siteCategory])
+            colorMatch=True
+    if colorMatch==False : colors.append(colorDict['Other websites'])
+
+#plot graph
+graph= href_sorted.plot(kind='bar', title='Website links occuring in more than '+str(websiteFrequencyToPlot) +" entries of GSJ (entry count, precentage, instances)", 
+                        figsize= (10,6), 
+                       xlabel="Website (root URL)", ylabel="Occurrences in unique entries", 
+                       legend=False
+                       )
 #set labels full 
 graph.set_xticklabels(href_sorted.website)
-# graph.legend=False
 
-
+# CREATE GRAPH LEGEND & COLOR BARS
+if colorGraph: 
+    patches=[]
+    for siteGroup in websiteDict: 
+        patches.append(mpatches.Patch(color = colorDict[siteGroup], label=siteGroup))
+    #generate legend
+    legend= graph.legend(handles=patches, loc='best')
+#     legend.set_title("Color groups")
 #annotate bars with percentages 
 for i in range(0, len(graph.patches)): 
+
     p= graph.patches[i]
+    if colorGraph: 
+        p.set_color(colors[i])
     value= p.get_height()
     perc = round((value/nEntries)*100) #round to integer
-    if i==0: 
-        graph.annotate( str(value)+ ' ('+str(perc)+")%",
-                   (p.get_x()+p.get_width()/2. -.3, p.get_height()+0.0),ha='left',
-                   va='center',xytext=(0, 8),textcoords='offset points')
+    if i==0: # horizontal label for 1st bar 
+        graph.annotate( graphLabels[i], #str(value)+ ' ('+str(perc)+")%",
+                   (p.get_x()+p.get_width()/2. -.3, p.get_height()-0.3),ha='left',
+                   va='center',xytext=(0, 8),textcoords='offset points', 
+                      fontsize=9)
     else: 
-        graph.annotate( str(value)+ '\n'+str(perc)+"%",
-                   (p.get_x()+p.get_width()/2., p.get_height()+0.5),ha='center',
-                   va='center',xytext=(0, 8),textcoords='offset points')
+        graph.annotate(graphLabels[i], #str(value)+ '\n'+str(perc)+"%",
+                   (p.get_x()+p.get_width()/2., p.get_height()+1.5),ha='center',
+                   va='center',xytext=(0, 8),textcoords='offset points', 
+                      fontsize=9)
 
-
+        
 #Snippet for checking precise website entries 
-lookup= False 
-var='tandfonline.com'#'journals.sfu.ca'#'nickyee.com'#'wordpress.com' #'gamestudies.org'
+lookup= False
+var='gamestudies.org'# 'tandfonline.com'# '[DOI]' #'journals.sfu.ca'#'nickyee.com'#'wordpress.com' 
 if lookup: 
-    print(var+ " is referened in " +str(len(commonLinkEntries[var]))+" different articles, "+str(commonLinkInstances[var])+ " times overall" )
+    print(var+ " is referenced in " +str(len(commonLinkEntries[var]))+" different articles, "+str(commonLinkInstances[var])+ " times overall" )
     #see cases :
-    print (commonLinkCases[var])
+    for case in commonLinkCases[var]: 
+        print ('\t'+ case)
     
 #save plot 
 if savePlots==True: 
-    filename= 'gsc_popular_websites.png'
+    if colorGraph: filename= 'gsc_popular_websites_colored.png'
+    else: filename= 'gsc_popular_websites.png'
     graph.get_figure().savefig(os.path.join(dataExportFolder,filename), 
                                bbox_inches = 'tight', dpi=300)
     print("Saved graph as: " + filename)
+    
+
 ```
 
-    Saved graph as: gsc_popular_websites.png
+    Saved graph as: gsc_popular_websites_colored.png
     
 
 
@@ -2344,7 +2499,7 @@ print("Images saved!")
 ```
 
 ### 7.2 Function to get Entry Authors [inconclusive; not used]
-It's pretty much impossible to consistently get authors from Entries in the Game Studies Journal --see comments below. But not necessarily needed for this application. Partial solution below.
+It's pretty much impossible to consistently get authors from Entries in the Game Studies Journal (see comments below). But not necessarily needed for this application. Partial solution below.
 
 
 ```python
