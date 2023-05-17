@@ -1,7 +1,7 @@
 # Game Studies Journal Scraper - Annotated Source Code & Documentation Repository
 Fully annotated Python Jupyter notebook of a data scraper used to mine and visualize information about (non-text) media published in contributions of the [Game Studies Journal (gamestudies.org)](https://gamestudies.org/) -- such as images, tables, hyperlinks, and iframes. 
 
-Developed for, and as part of the paper ***Other than Text: Media Used in Game Studies Publications. A Computational Analysis into 20 Years of Publications of the Game Studies Journal, and an Appeal for Research Through Design***, accepted for publication in the Proceedings of the [2023 DiGRA International Conference: Limits and Margins of Games](https://digra2023.org/). 
+Developed for, and as part of the contribution ***Other than Text: Media Used in Game Studies Publications. A Computational Analysis into 20 Years of Publications of the Game Studies Journal, and an Appeal for Research Through Design***, accepted for publication in the Proceedings of the [2023 DiGRA International Conference: Limits and Margins of Games](https://digra2023.org/). 
 
 To view the software and its findings it is recommended to open either the `IPYNB` or `MD` source code versions on GitHub which contain an extended outline, documentation and code annotations as well as the generated data visualizations. 
 
