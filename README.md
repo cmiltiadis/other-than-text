@@ -13,7 +13,9 @@ This repository includes:
   - a CSV file listing all images found in journal entries (see `data_export/CSV-GSJ image list.csv`); and 
   - a CVS file based on the previous, used by the author to manually classify all images by type (`data_import/CSV-GSJ image classification list.csv`). 
   
-This repository is hosted temporarily by the author pending action by the [DiGRA board](http://www.digra.org/) for hosting and archiving contribution artifacts that cannot be accommodated within traditional paper formats. This is a test repository aiming to demonstrate a potential form of open, extendable, and forward compatible means for sharing non-standard research artifacts in videogame scholarship. 
+This repository is hosted temporarily by the author pending action by the [DiGRA board](http://www.digra.org/) for hosting and archiving contribution artifacts that cannot be accommodated within traditional paper formats. This is a test repository aiming to demonstrate a potential form of open, extendable, and forward compatible means for sharing non-standard research artifacts in videogame scholarship. This code is archived and citable at the handle [![DOI](https://zenodo.org/badge/627804593.svg)](https://zenodo.org/badge/latestdoi/627804593)
 
 The repository is provided with Copyleft GNU GPL license for anyone to share, modify, and extend this study. 
+
+
   
